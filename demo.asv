@@ -1,0 +1,20 @@
+% 本演示程序用于将数据集中test_x中随机选取15张图片做测试
+
+clear all;
+load mnist_uint8;
+load net;
+test_x = double(reshape(test_x',28,28,10000))/255;
+test_y = double(test_y');
+index = randi([1 10000], 15, 1);
+x = test_x(:, :, index);
+y = test_y(:, index);
+label = cnnpredict(net, x);
+[~, y] = max(y);
+y = y - 1;
+for i = 1 : 5
+    for j = 1 : 3
+        k = (i-1)*5+j;
+        img = x(:, :, k)';
+        subplot(i, j, k);
+        imshow(img);
+        title(['实际值：' num2str(y(k)) ',预测值：' num2str(label(k)));
